@@ -16,19 +16,36 @@ model User {
   displayName String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  Page Page[]
 }
 
 model Page {
-  id String @id
+  id        String   @id
+  title     String
+  html      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  User      User     @relation(fields: [userId], references: [id])
+
+  KanbanBoard KanbanBoard[]
 }
 
-model Component {
-  id   String @id
-  type String
-  // attrs
-  // content
+model KanbanBoard {
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Page Page[]
 }
 
 model Trash {
   id String @id
+}
+
+model AppSetting {
+  id         String  @id
+  appearance Boolean @default(true)
+  language   String
 }

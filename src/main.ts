@@ -7,14 +7,14 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true
-    })
+      whitelist: true,
+    }),
   );
   app.enableCors();
 
   const config = new DocumentBuilder()
-    .setTitle("Pbl-Api")
-    .setDescription("The Api documents of pbl project")
+    .setTitle('Pbl-Api')
+    .setDescription('The Api documents of pbl project')
     .setVersion('1.0')
     .addBearerAuth()
     .build();

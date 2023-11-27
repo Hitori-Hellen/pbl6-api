@@ -1,33 +1,37 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
-  async findAll() {
-    return await this.prisma.user.findMany()
+  async findAllUser() {
+    return await this.prisma.user.findMany();
   }
 
-  async findOne(id: string) {
-    const user = await this.prisma.user.findUnique({ where: { id: id } });
+  async findOneUser(userId: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
-      throw new NotFoundException("User not found")
+      throw new NotFoundException('User not found');
     }
 
-    return user
+    return user;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
-    const user = await this.prisma.user.findUnique({ where: { id: id } });
-
+  async changeUserName(userId: string, usernameUpdate: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
-      throw new NotFoundException("User not found")
+      throw new NotFoundException('User not found');
     }
-
-
+    const verifyChangeUserame = await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        email: undefined,
+        displayName: usernameUpdate,
+      },
+    });
+    return verifyChangeUserame;
   }
 
   remove(id: string) {

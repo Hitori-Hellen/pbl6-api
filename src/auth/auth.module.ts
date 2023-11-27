@@ -17,9 +17,9 @@ import { MailModule } from 'src/mail/mail.module';
       signOptions: { expiresIn: '1d' },
     }),
     UserModule,
-    MailModule
+    MailModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
 })
-export class AuthModule { }
+export class AuthModule {}
