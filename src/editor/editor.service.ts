@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { v4 as uuidv4 } from 'uuid';
 import { RequestWithIdDto } from './dto/request-with-id.dto';
 import { CreatePageDto } from './dto/create-page.dto';
+import { GetHistoryPage } from './dto/get-history-change.dto';
 
 @Injectable()
 export class EditorService {
@@ -63,10 +64,20 @@ export class EditorService {
         title: dto.pageTitle,
       },
     });
-    return pageHistory;
+    let response;
+    for (let i = 0; i <= pageHistory.length; i++) {
+      const history_temp = new GetHistoryPage();
+      history_temp.title = pageHistory[i].title;
+      history_temp.userId = pageHistory[i].userId;
+      history_temp.createdAt = pageHistory[i].createdAt;
+      response.push(history_temp);
+    }
+    return response;
   }
 
-  async createPage(dto: CreatePageDto) {
+  async getPageHistoryChangeContent() {}
+
+  async createPageContent(dto: CreatePageDto) {
     const user = await this.prisma.user.findUnique({
       where: {
         id: dto.userId,
@@ -85,7 +96,7 @@ export class EditorService {
           userId: dto.userId,
         },
         include: {
-          User: true,
+          user: true,
         },
       });
       return page;
@@ -94,7 +105,10 @@ export class EditorService {
     }
   }
 
-  async updatePage() {}
-
-  async deletePage() {}
+  async deletePage(pageId: string) {
+    return {
+      status: 200,
+      data: `Page with the id ${pageId} is deleted`,
+    };
+  }
 }

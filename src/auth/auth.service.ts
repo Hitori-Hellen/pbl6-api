@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
@@ -9,19 +9,25 @@ import { VerifyDto } from './dto/verify.dto';
 const randomCode = Math.floor(1000000 + Math.random() * 9999999).toString();
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private jwt: JwtService, private mail: MailService) { }
+  constructor(
+    private prisma: PrismaService,
+    private jwt: JwtService,
+    private mail: MailService,
+  ) {}
 
   async sendEmailLogin(dto: LoginDto) {
     await this.mail.sendUserConfirmation(dto.email, randomCode);
-    return "success";
+    return 'success';
   }
 
   async verifyLogin(dto: VerifyDto) {
     if (dto.verifycode != randomCode) {
-      throw new UnauthorizedException("Your code is not true")
+      throw new UnauthorizedException('Your code is not true');
     }
 
-    const user = await this.prisma.user.findUnique({ where: { email: dto.email } })
+    const user = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
 
     if (!user) {
       const userId = uuidv4();
@@ -35,7 +41,7 @@ export class AuthService {
         });
 
         return {
-          accessToken: this.jwt.sign({ userId: userId })
+          accessToken: this.jwt.sign({ userId: userId }),
         };
       } catch (error) {
         throw error;
@@ -43,7 +49,7 @@ export class AuthService {
     }
 
     return {
-      accessToken: this.jwt.sign({ userId: user.id })
-    }
+      accessToken: this.jwt.sign({ userId: user.id }),
+    };
   }
 }

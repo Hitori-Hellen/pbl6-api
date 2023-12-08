@@ -6,6 +6,8 @@ import {
   Param,
   Delete,
   UseGuards,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -17,6 +19,7 @@ import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @HttpCode(HttpStatus.OK)
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
@@ -24,6 +27,7 @@ export class UserController {
     return this.userService.findAllUser();
   }
 
+  @HttpCode(HttpStatus.OK)
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
@@ -31,6 +35,7 @@ export class UserController {
     return this.userService.findOneUser(id);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Patch('/name/:id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
@@ -41,6 +46,7 @@ export class UserController {
     );
   }
 
+  @HttpCode(HttpStatus.OK)
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()

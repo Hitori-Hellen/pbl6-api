@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:13.5
+    restart: always
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+    ports:
+      - 5432:5432
+  api:
+    image: duongle3005/pbl6-api
+    build: .
+    depends_on:
+      - db
+    ports:
+      - 3000:3000
+    env_file: ./.env

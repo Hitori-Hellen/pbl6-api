@@ -10,41 +10,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model user {
   id          String   @id
   email       String   @unique
   displayName String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  Page Page[]
+  page page[]
 }
 
-model Page {
+model page {
   id        String   @id
   title     String
   html      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   userId    String
-  User      User     @relation(fields: [userId], references: [id])
+  user      user     @relation(fields: [userId], references: [id])
 
-  KanbanBoard KanbanBoard[]
+  kanbanBoard kanbanBoard[]
 }
 
-model KanbanBoard {
+model kanbanBoard {
   id        String   @id
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  Page Page[]
+  page page[]
 }
 
-model Trash {
+model trash {
   id String @id
 }
 
-model AppSetting {
+model appSetting {
   id         String  @id
   appearance Boolean @default(true)
   language   String

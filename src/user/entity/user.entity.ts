@@ -1,7 +1,7 @@
-import { User } from "@prisma/client";
-import { ApiProperty } from "@nestjs/swagger";
+import { user } from '@prisma/client';
+import { ApiProperty } from '@nestjs/swagger';
 
-export class UserEntity implements User {
+export class UserEntity implements user {
   @ApiProperty()
   id: string;
 
