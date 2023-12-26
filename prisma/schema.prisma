@@ -17,7 +17,8 @@ model user {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  page page[]
+  page  page[]
+  event event[]
 }
 
 model page {
@@ -48,4 +49,20 @@ model appSetting {
   id         String  @id
   appearance Boolean @default(true)
   language   String
+}
+
+model event {
+  id              String   @id
+  title           String?
+  body            String?
+  isAllday        Boolean  @default(false)
+  start           DateTime
+  end             DateTime
+  state           String?
+  isVisible       Boolean  @default(true)
+  isPending       Boolean  @default(false)
+  color           String?
+  backgroundColor String   @default("#037ffc")
+  userId          String
+  user            user     @relation(fields: [userId], references: [id])
 }

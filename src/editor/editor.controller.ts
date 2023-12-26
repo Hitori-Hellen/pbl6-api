@@ -15,7 +15,6 @@ import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { RequestWithIdAndTitleDto } from './dto/request-with-id-and-title.dto';
 import { CreatePageDto } from './dto/create-page.dto';
-import { DeletePageDto } from './dto/delete-page.dto';
 import { UpdatePageDto } from './dto/update-page.dto';
 
 @Controller('editor')
@@ -58,7 +57,7 @@ export class EditorController {
   @Delete(':title')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  async deletePage(@Body() dto: DeletePageDto) {
+  async deletePage(@Body() dto: RequestWithIdAndTitleDto) {
     return await this.editorService.deletePage(dto);
   }
 }

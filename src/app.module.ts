@@ -5,18 +5,20 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { MailModule } from './mail/mail.module';
 import { EditorModule } from './editor/editor.module';
+import { EventModule } from './event/event.module';
 
 @Module({
   imports: [
     PrismaModule,
     ConfigModule.forRoot({
-      envFilePath: ".env",
+      envFilePath: '.env',
       isGlobal: true,
     }),
     UserModule,
     AuthModule,
     MailModule,
-    EditorModule
+    EditorModule,
+    EventModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

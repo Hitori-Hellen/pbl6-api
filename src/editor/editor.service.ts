@@ -3,7 +3,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { v4 as uuidv4 } from 'uuid';
 import { RequestWithIdAndTitleDto } from './dto/request-with-id-and-title.dto';
 import { CreatePageDto } from './dto/create-page.dto';
-import { DeletePageDto } from './dto/delete-page.dto';
 import { UpdatePageDto } from './dto/update-page.dto';
 import { PageEntity } from './entity/page.entity';
 
@@ -93,16 +92,16 @@ export class EditorService {
     return updatePage;
   }
 
-  async deletePage(dto: DeletePageDto) {
+  async deletePage(dto: RequestWithIdAndTitleDto) {
     const removePage = await this.prisma.page.deleteMany({
       where: {
-        title: dto.pageTitle,
+        id: dto.pageId,
         userId: dto.userId,
       },
     });
     return {
       status: 200,
-      data: `Page with the id ${dto.pageTitle} is deleted`,
+      data: `${removePage.count} is deleted`,
     };
   }
 }

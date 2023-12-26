@@ -4,7 +4,6 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   UseGuards,
   HttpCode,
   HttpStatus,
@@ -44,13 +43,5 @@ export class UserController {
       updateUserDto.id,
       updateUserDto.displayName,
     );
-  }
-
-  @HttpCode(HttpStatus.OK)
-  @Delete(':id')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  async remove(@Param('id') id: string) {
-    return await this.userService.remove(id);
   }
 }
