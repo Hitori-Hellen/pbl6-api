@@ -42,6 +42,7 @@ export class AuthService {
 
         return {
           accessToken: this.jwt.sign({ userId: userId }),
+          userId: newUser.id,
         };
       } catch (error) {
         throw error;
@@ -50,6 +51,7 @@ export class AuthService {
 
     return {
       accessToken: this.jwt.sign({ userId: user.id }),
+      userId: user.id,
     };
   }
 }

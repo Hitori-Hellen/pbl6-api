@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { v4 as uuidv4 } from 'uuid';
-import { RequestWithIdDto } from './dto/request-with-id.dto';
+import { RequestWithIdAndTitleDto } from './dto/request-with-id-and-title.dto';
 import { CreatePageDto } from './dto/create-page.dto';
-import { GetHistoryPage } from './dto/get-history-change.dto';
+import { DeletePageDto } from './dto/delete-page.dto';
+import { UpdatePageDto } from './dto/update-page.dto';
+import { PageEntity } from './entity/page.entity';
 
 @Injectable()
 export class EditorService {
@@ -23,10 +25,10 @@ export class EditorService {
         userId: userId,
       },
     });
-    return pageTitles;
+    return pageTitles.map((page) => new PageEntity(page));
   }
 
-  async getPageContent(dto: RequestWithIdDto) {
+  async getPageContent(dto: RequestWithIdAndTitleDto) {
     const user = await this.prisma.user.findUnique({
       where: {
         id: dto.userId,
@@ -38,10 +40,10 @@ export class EditorService {
     const pageContent = await this.prisma.page.findFirst({
       where: {
         userId: dto.userId,
-        title: dto.pageTitle,
+        title: dto.pageId,
       },
       orderBy: {
-        id: 'desc',
+        createdAt: 'desc',
       },
     });
     if (!pageContent) {
@@ -49,33 +51,6 @@ export class EditorService {
     }
     return pageContent;
   }
-
-  async getPageHistoryChange(dto: RequestWithIdDto) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: dto.userId,
-      },
-    });
-    if (!user) {
-      throw new NotFoundException('User Not Found');
-    }
-    const pageHistory = await this.prisma.page.findMany({
-      where: {
-        title: dto.pageTitle,
-      },
-    });
-    let response;
-    for (let i = 0; i <= pageHistory.length; i++) {
-      const history_temp = new GetHistoryPage();
-      history_temp.title = pageHistory[i].title;
-      history_temp.userId = pageHistory[i].userId;
-      history_temp.createdAt = pageHistory[i].createdAt;
-      response.push(history_temp);
-    }
-    return response;
-  }
-
-  async getPageHistoryChangeContent() {}
 
   async createPageContent(dto: CreatePageDto) {
     const user = await this.prisma.user.findUnique({
@@ -105,10 +80,29 @@ export class EditorService {
     }
   }
 
-  async deletePage(pageId: string) {
+  async updatePageContent(dto: UpdatePageDto) {
+    const updatePage = await this.prisma.page.update({
+      where: {
+        id: dto.pageId,
+        userId: dto.userId,
+      },
+      data: {
+        html: dto.html,
+      },
+    });
+    return updatePage;
+  }
+
+  async deletePage(dto: DeletePageDto) {
+    const removePage = await this.prisma.page.deleteMany({
+      where: {
+        title: dto.pageTitle,
+        userId: dto.userId,
+      },
+    });
     return {
       status: 200,
-      data: `Page with the id ${pageId} is deleted`,
+      data: `Page with the id ${dto.pageTitle} is deleted`,
     };
   }
 }
