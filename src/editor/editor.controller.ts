@@ -25,31 +25,31 @@ export class EditorController {
 
   @HttpCode(HttpStatus.OK)
   @Get('/user/:id')
-  // @UseGuards(JwtAuthGuard)
-  // @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   async findAllPage(@Param('id') userId: string) {
     return await this.editorService.getAllPageTitle(userId);
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('content')
-  // @UseGuards(JwtAuthGuard)
-  // @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   async getPageContent(@Body() dto: RequestWithIdAndTitleDto) {
     return await this.editorService.getPageContent(dto);
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('create')
-  // @UseGuards(JwtAuthGuard)
-  // @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   async createPage(@Body() dto: CreatePageDto) {
     return await this.editorService.createPageContent(dto);
   }
   @HttpCode(HttpStatus.OK)
   @Patch('update')
-  // @UseGuards(JwtAuthGuard)
-  // @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   async updatePageContent(@Body() dto: UpdatePageDto) {
     return await this.editorService.updatePageContent(dto);
   }
