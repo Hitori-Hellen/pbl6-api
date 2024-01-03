@@ -54,7 +54,7 @@ export class EditorController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Delete(':title')
+  @Delete('delete')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async deletePage(@Body() dto: RequestWithIdAndTitleDto) {

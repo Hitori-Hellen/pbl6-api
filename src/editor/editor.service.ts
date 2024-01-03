@@ -10,7 +10,7 @@ import { PageEntity } from './entity/page.entity';
 export class EditorService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getAllPageTitle(userId: string) {
+  async getAllPageTitle(userId: string): Promise<any> {
     const user = await this.prisma.user.findUnique({
       where: {
         id: userId,
@@ -36,13 +36,10 @@ export class EditorService {
     if (!user) {
       throw new NotFoundException('User Not Found');
     }
-    const pageContent = await this.prisma.page.findFirst({
+    const pageContent = await this.prisma.page.findUnique({
       where: {
         userId: dto.userId,
-        title: dto.pageId,
-      },
-      orderBy: {
-        createdAt: 'desc',
+        id: dto.pageId,
       },
     });
     if (!pageContent) {
@@ -93,7 +90,7 @@ export class EditorService {
   }
 
   async deletePage(dto: RequestWithIdAndTitleDto) {
-    const removePage = await this.prisma.page.deleteMany({
+    const removePage = await this.prisma.page.delete({
       where: {
         id: dto.pageId,
         userId: dto.userId,
@@ -101,7 +98,7 @@ export class EditorService {
     });
     return {
       status: 200,
-      data: `${removePage.count} is deleted`,
+      data: `Page with id ${dto.pageId} is deleted`,
     };
   }
 }
